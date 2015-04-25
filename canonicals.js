@@ -14,23 +14,23 @@ var APP = APP || {};
     });
 
     app.xhr.fetch(ids.join(';')).then(function success(questions) {
-        questions.items.forEach(function(question) {
-            Object.keys(canonicals).forEach(function(category) {
-                canonicals[category].forEach(function(q, i) {
-                    //they see me nesting...
-                    if (q === question.question_id) {
-                        canonicals[category][i] = question;
-                    }
-                });
-            });
-        });
+        var canonicalQuestions = questions.items.reduce(function(questionMap, soQuestion) {
+            return Object.keys(canonicals).reduce(function(questionArr, category) {
+                questionMap[category] = questionMap[category] || [];
+                if (containsQuestionId(canonicals[category], soQuestion.question_id)) {
+                    questionMap[category].push(soQuestion);
+                }
+                return questionMap;
+            }, [])
+            return questionMap;
+        }, {});
 
         document.body.appendChild(app.dom.h1({}, [], 'List of canonicals'));
 
-        var sections = Object.keys(canonicals).map(function(category) {
+        var sections = Object.keys(canonicalQuestions).map(function(category) {
             return app.dom.section({ class: 'category' }, [
                 app.dom.h2({}, [], category),
-                app.dom.ul({}, canonicals[category].map(function(question) {
+                app.dom.ul({}, canonicalQuestions[category].map(function(question) {
                     return app.dom.li({}, [createQuestionElement(question)]);
                 }))
             ]);
@@ -41,6 +41,12 @@ var APP = APP || {};
     }, function error(reasons) {
         document.body.appendChild(app.dom.div({}, [], 'Something went pearshaped because ' + reasons));
     });
+
+    function containsQuestionId(arr, id) {
+        return arr.some(function(e) {
+            return e === id;
+        });
+    }
 
     function createQuestionElement(question) {
         return app.dom.div({}, [
