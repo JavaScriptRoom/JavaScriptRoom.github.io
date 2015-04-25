@@ -1,0 +1,29 @@
+.canonicals {
+    margin-left: 20px;
+}
+
+.canonicals ul {
+    list-style-type: none;
+}
+
+.canonicals li {
+    padding: 20px 0;
+    border-bottom: thin solid gray;
+}
+
+.canonicals .score {
+    width: 50px;
+    background-color: lightgray;
+    padding: 10px;
+    margin: 5px;
+}
+
+.canonicals .tags {
+    margin-top: 20px;
+}
+
+.canonicals .tags span {
+    padding: 5px;
+    background-color: lightgray;
+    margin: 0 5px 0 5px;
+}
