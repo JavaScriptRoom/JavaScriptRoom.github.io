@@ -2,25 +2,17 @@ var APP = APP || {};
 (function(app) {
 
     function element(name) {
-        return function() {
+        return function(attrObj, children, textContent) {
             var e = document.createElement(name);
-            var args = Array.prototype.slice.call(arguments);
-            args.forEach(function(arg) {
-                var type = Object.prototype.toString.call(arg);
-                if (type.indexOf('Object') > -1) {
-                    for (var prop in arg) {
-                        if (arg.hasOwnProperty(prop)) {
-                            e.setAttribute(prop, arg[prop]);
-                        }
-                    }
-                } else if (type.indexOf('Array') > -1) {
-                    arg.forEach(function(child) {
-                        e.appendChild(child);
-                    });
-                } else if (type.indexOf('String') > -1 || type.indexOf('Number') > -1) {
-                    e.innerHTML = arg;
-                }
+            Object.keys(attrObj || {}).forEach(function(prop) {
+                e.setAttribute(prop, attrObj[prop]);
             });
+            (children || []).forEach(function(child) {
+                e.appendChild(child);
+            });
+            if (textContent) {
+                e.innerHTML = textContent;
+            }
             return e;
         }
     }

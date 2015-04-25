@@ -25,28 +25,28 @@ var APP = APP || {};
             });
         });
 
-        document.body.appendChild(app.dom.h1('List of canonicals'));
+        document.body.appendChild(app.dom.h1({}, [], 'List of canonicals'));
 
         var sections = Object.keys(canonicals).map(function(category) {
             return app.dom.section({ class: 'category' }, [
-                app.dom.h2(category),
-                app.dom.ul(canonicals[category].map(function(question) {
-                    return app.dom.li([createQuestionElement(question)]);
+                app.dom.h2({}, [], category),
+                app.dom.ul({}, canonicals[category].map(function(question) {
+                    return app.dom.li({}, [createQuestionElement(question)]);
                 }))
             ]);
         });
 
         document.body.appendChild(app.dom.div({ class: 'canonicals' }, sections));
-        document.body.appendChild(app.dom.div('Number of remaining API calls before meltdown: ' + questions.quota_remaining));
+        document.body.appendChild(app.dom.div({}, [], 'Number of remaining API calls before meltdown: ' + questions.quota_remaining));
     }, function error(reasons) {
-        document.body.appendChild(app.dom.div('Something went pearshaped because ' + reasons));
+        document.body.appendChild(app.dom.div({}, [], 'Something went pearshaped because ' + reasons));
     });
 
     function createQuestionElement(question) {
-        return app.dom.div([
-            app.dom.span({ class: 'score' }, question.score),
-            app.dom.a({ href: question.link, target: '_blank' }, question.title),
-            app.dom.div({ class: 'tags' }, question.tags.map(function(tag) { return app.dom.span(tag) }))
+        return app.dom.div({}, [
+            app.dom.span({ class: 'score' }, [], question.score),
+            app.dom.a({ href: question.link, target: '_blank' }, [], question.title),
+            app.dom.div({ class: 'tags' }, question.tags.map(function(tag) { return app.dom.span({}, [], tag) }))
         ]);
     }
 
