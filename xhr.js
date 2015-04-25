@@ -7,23 +7,22 @@ var APP = APP || {};
 
     app.xhr.fetch = function(ids) {
         return new Promise(function(resolve, reject) {
+            var url = makeApiUrl(ids);
             var req = new XMLHttpRequest();
-            var url = app.xhr.makeApiUrl(ids);
-            req.onreadystatechange = function() {
-                if (req.readyState === 4) {
-                    if (req.status === 200) {
-                        return resolve(JSON.parse(req.responseText));
-                    } else {
-                        return reject('shit dun goofed');
-                    }
+            req.responseType = "json";
+            req.onload = function() {
+                if (this.status === 200) {
+                    return resolve(this.response);
+                } else {
+                    return reject('shit dun goofed');
                 }
-            };
+            }
             req.open('GET', url);
             req.send();
         });
     };
 
-    app.xhr.makeApiUrl = function(questionIds) {
+    function makeApiUrl(questionIds) {
         return API_URLROOT + questionIds + '?site=stackoverflow';
     };
 
